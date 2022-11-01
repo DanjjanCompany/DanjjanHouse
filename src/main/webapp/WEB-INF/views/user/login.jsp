@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="root" value="${pageContext.request.contextPath}" />
+<c:set var="root" value="${pageContext.request.contextPath}"/>
 <c:if test="${cookie.ssafy_id.value ne null}">
 	<c:set var="idck" value=" checked"/>
 	<c:set var="saveid" value="${cookie.ssafy_id.value}"/>
@@ -21,7 +22,6 @@
     <title>SSAFY</title>
   </head>
   <body>
-  <c:if test="${empty userinfo}">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10 col-md-10 col-sm-12">
@@ -82,11 +82,11 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      document.querySelector("#btn-mv-join").addEventListener("click", function () {
+    document.querySelector("#btn-mv-join").addEventListener("click", function () {
     	location.href = "${root}/user/join";
       });
-      
-      document.querySelector("#btn-login").addEventListener("click", function () {
+    
+    document.querySelector("#btn-login").addEventListener("click", function () {
         if (!document.querySelector("#userid").value) {
           alert("아이디 입력!!");
           return;
@@ -100,24 +100,5 @@
         }
       });
     </script>
-  </c:if>
-  <c:if test="${!empty userinfo}">
-    <div class="container">
-      <%@ include file="/WEB-INF/views/common/confirm.jsp" %>
-      <div class="row justify-content-center">
-        <div class="col-lg-10 col-md-10 col-sm-12">
-          <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-            <mark class="orange">실거래가 검색 &amp; 결과 페이지</mark>
-          </h2>
-        </div>
-        <div class="col-lg-10 col-md-10 col-sm-12 text-center">
-          <a href="${root}/board/list?pgno=1&key=&word=">글목록</a>
-          <c:if test="${userinfo.userId eq 'admin'}">
-	      		<a href="${root}/user/list">회원목록</a><br />
-	      	</c:if>
-        </div>
-      </div>
-    </div>
-  </c:if>
   </body>
 </html>
