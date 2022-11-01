@@ -30,13 +30,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		 */
 	}
 
-	// 정적 자원 경로 매핑
-	// assets로 시작하는 요청 시
-	// src/main/webapp/resources/assets로 매핑
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/assets/**")
-		.addResourceLocations("/resources/assets/");
-		WebMvcConfigurer.super.addResourceHandlers(registry);
-	}
+//	// 정적 자원 경로 매핑
+//	// assets로 시작하는 요청 시
+//	// src/main/webapp/resources/assets로 매핑
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler("/assets/**")
+//		.addResourceLocations("/resources/assets/");
+//		WebMvcConfigurer.super.addResourceHandlers(registry);
+//	}
 }
