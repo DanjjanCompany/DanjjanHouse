@@ -16,9 +16,6 @@
 	<div class="col-lg-10 col-md-10 col-sm-12">
 		<div class="row align-self-center mb-2">
 			<div class="col-md-2 text-start">
-				<button type="button" class="btn btn-outline-primary"
-					data-bs-toggle="modal" data-bs-target="#registerModal">회원
-					등록</button>
 			</div>
 			<div class="col-md-5 offset-5">
 				<form class="d-flex" id="form-search" action="">
@@ -33,7 +30,7 @@
 					<div class="input-group input-group-sm">
 						<input type="text" class="form-control" id="sword" name="word"
 							placeholder="검색어..." />
-						<button id="btn-search" class="btn btn-dark" type="button">검색</button>
+						<button id="btn-search" class="btn btn-dark" type="button" onclick>검색</button>
 					</div>
 				</form>
 			</div>
@@ -152,12 +149,42 @@
 				.then(response => response.json())
 				.then(data => makeList(data));
 			
-			// 회워 정보 수정 보기.
-			function viewModify(userid) {
-				console.log(`${userid}`);
-				document.querySelector(`#view_${userid}`).setAttribute("style", "display: none;");
-				document.querySelector(`#mview_${userid}`).setAttribute("style", "display: ;");
+			// 회원 정보 수정 보기.
+			function viewModify(el) {
+				let id = el.parentNode.parentNode.getAttribute("data-id");
+				document.querySelector(`#view_\${id}`).setAttribute("style", "display: none;");
+				document.querySelector(`#mview_\${id}`).setAttribute("style", "display: ;");
 			}
+		      // 회원 정보 수정 닫기.
+		      function closeModify(el) {
+		    	  console.log(el);
+		        let id = el.parentNode.parentNode.getAttribute("data-id");
+		        document.querySelector(`#view_\${id}`).setAttribute("style", "display: ;");
+		        document.querySelector(`#mview_\${id}`).setAttribute("style", "display: none;");
+		      }
+		      
+		      // 회원 정보 수정.
+		      function userModify(el) {
+		        let id = el.parentNode.parentNode.getAttribute("data-id");
+		        let pwd = document.querySelector(`#userpwd\${id}`).value;
+		        let email = document.querySelector(`#email\${id}`).value.split("@");
+		        let modifyinfo = {
+		          userId: id,
+		          userPwd: pwd,
+		          emailId: email[0],
+		          emailDomain: email[1],
+		        };
+		        let config = {
+		          method: "PUT",
+		          headers: {
+		            "Content-Type": "application/json",
+		          },
+		          body: JSON.stringify(modifyinfo),
+		        };
+		        fetch(`http://localhost:9000/admin/user`, config)
+		          .then((response) => response.json())
+		          .then((data) => makeList(data));
+		      }
 			/* let modifyViewBtns = document.querySelectorAll(".modifyViewBtn");
 			modifyViewBtns.forEach(function(btn) {
 				btn.addEventListener("click", function() {
@@ -170,10 +197,29 @@
 				$("#mview_" + mid).css("display", "");
 			}); */
 			
+			// 회원 삭제.
+		      function userDelete(el) {
+		        if (confirm("삭제 하시렵니까?")) {
+		          let id = el.parentNode.parentNode.getAttribute("data-id");
+		          console.log(id);
+		          let config = {
+		            method: "DELETE",
+		            headers: {
+		              "Content-Type": "application/json",
+		            },
+		          };
+		          fetch(`http://localhost:9000/admin/user/\${id}`, config)
+		            .then((response) => response.json())
+		            .then((data) => makeList(data));
+		        }
+		      }
+			
 			// 회원 목록 tbody
 			function makeList(users) {
 				console.log(users);
 				let tbody = ``;
+				console.log(users.length);
+				if(users.length >=2){
 				users.forEach(function(user) {
 					tbody += `
 						<tr id="view_\${user.userId}" class="view" data-id="\${user.userId}">
@@ -183,23 +229,51 @@
 							<td class="text-center">\${user.emailId}@\${user.emailDomain}</td>
 							<td class="text-center">\${user.joinDate}</td>
 							<td class="text-center">
-								<button type="button" class="modifyViewBtn btn btn-outline-primary btn-sm" onclick="viewModify('\${user.userId}');">수정</button>
-								<button type="button" class="deleteBtn btn btn-outline-danger btn-sm">삭제</button>
+								<button type="button" class="modifyViewBtn btn btn-outline-primary btn-sm" onclick="viewModify(this);">수정</button>
+								<button type="button" class="deleteBtn btn btn-outline-danger btn-sm" onclick="userDelete(this)">삭제</button>
 							</td>
 						</tr>
 						<tr id="mview_\${user.userId}" data-id="\${user.userId}" style="display: none;">
 							<td>${user.userId}</td>
-							<td><input type="text" name="userpwd" id="userpwd\${user.userId}'" value="\${user.userPwd}"></td>
+							<td><input type="text" name="userpwd" id="userpwd\${user.userId}" value="\${user.userPwd}"></td>
 							<td>${user.userName}</td>
 							<td><input type="text" name="email" id="email\${user.userId}" value="\${user.emailId}"></td>
 							<td>${user.joinDate}</td>
 							<td>
-								<button type="button" class="modifyBtn btn btn-primary btn-sm">수정</button>
-								<button type="button" class="cancelBtn btn btn-danger btn-sm">취소</button>
+								<button type="button" class="modifyBtn btn btn-primary btn-sm" onclick="userModify(this)">수정</button>
+								<button type="button" class="cancelBtn btn btn-danger btn-sm" onclick="closeModify(this)">취소</button>
 							</td>
 						</tr>
 					`;
 				});
+				}
+				else{
+					
+					tbody += `
+						<tr id="view_\${users.userId}" class="view" data-id="\${users.userId}">
+							<td class="text-center">\${users.userId}</td>
+							<td class="text-center">\${users.userPwd}</td>
+							<td class="text-center">\${users.userName}</td>
+							<td class="text-center">\${users.emailId}@\${users.emailDomain}</td>
+							<td class="text-center">\${users.joinDate}</td>
+							<td class="text-center">
+								<button type="button" class="modifyViewBtn btn btn-outline-primary btn-sm" onclick="viewModify(this);">수정</button>
+								<button type="button" class="deleteBtn btn btn-outline-danger btn-sm" onclick="userDelete(this)">삭제</button>
+							</td>
+						</tr>
+						<tr id="mview_\${users.userId}" data-id="\${users.userId}" style="display: none;">
+							<td>${users.userId}</td>
+							<td><input type="text" name="userpwd" id="userpwd\${users.userId}" value="\${users.userPwd}"></td>
+							<td>${users.userName}</td>
+							<td><input type="text" name="email" id="email\${users.userId}" value="\${users.emailId}"></td>
+							<td>${users.joinDate}</td>
+							<td>
+								<button type="button" class="modifyBtn btn btn-primary btn-sm" onclick="userModify(this)">수정</button>
+								<button type="button" class="cancelBtn btn btn-danger btn-sm" onclick="closeModify(this)">취소</button>
+							</td>
+						</tr>
+					`;
+				}
 				document.querySelector("#userlist").innerHTML = tbody;
 			}
 			
@@ -217,13 +291,22 @@
         form.setAttribute("action", "${root}/board/write");
         form.submit();
       });
-      
+      */
       document.querySelector("#btn-search").addEventListener("click", function () {
     	  let form = document.querySelector("#form-search");
-        form.setAttribute("action", "${root}/board/list");
-        form.submit();
+    	  let id = document.querySelector('#sword').value;
+    	  console.log(id);
+    	
+    	  fetch(`http://localhost:9000/admin/user/\${id}`)
+          .then((response) => response.json())
+          .then((data) => makeList(data));
+    	  
+    	  /*
+        form.setAttribute("action", `http://localhost:9000/admin/user/\${id}`);
+        form.submit()
+        */
       });
-      
+      /*
       let pages = document.querySelectorAll(".page-link");
       pages.forEach(function (page) {
         page.addEventListener("click", function () {

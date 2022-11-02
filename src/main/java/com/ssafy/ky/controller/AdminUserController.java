@@ -59,7 +59,6 @@ public class AdminUserController {
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
-
 	}
 
 	@ApiOperation(value = "회원등록", notes = "회원의 정보를 받아 처리.")
@@ -69,7 +68,7 @@ public class AdminUserController {
 		try {
 			memberService.joinMember(memberDto);
 			List<MemberDto> list = memberService.listMember(null);
-			logger.debug("dddd{}", list);
+			logger.debug("리스트의 결과는 {}", list);
 			return new ResponseEntity<List<MemberDto>>(list, HttpStatus.OK);
 //			return new ResponseEntity<Integer>(cnt, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -80,12 +79,13 @@ public class AdminUserController {
 
 	@ApiOperation(value = "회원정보", notes = "회원한명에 대한 정보.")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "userid", value = "아이디", required = true, dataType = "String", paramType = "path")
-//			@ApiImplicitParam(name = "param1", value = "파라미터1", required = true, dataType = "String", paramType = "query"),
-//			@ApiImplicitParam(name = "param2", value = "파마미터2", required = false, dataType = "int", paramType = "query") 
+			@ApiImplicitParam(name = "userid", value = "아이디", required = true, dataType = "String", paramType = "path"),
+//			@ApiImplicitParam(name = "username", value = "이름"),
+//			@ApiImplicitParam(name = "emaildomain", value = "이메일도메인") 
+			//, @PathVariable String username, @PathVariable String emaildomain, 
 	})
 	@GetMapping(value = "/user/{userid}")
-	public ResponseEntity<?> userInfo(@PathVariable("userid") String userId) {
+	public ResponseEntity<?> userInfo(@PathVariable(name = "userid") String userId) {
 		logger.debug("userInfo userid : {}", userId);
 		try {
 			MemberDto memberDto = memberService.getMember(userId);

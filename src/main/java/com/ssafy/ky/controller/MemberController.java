@@ -102,9 +102,9 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/list")
-	public String list() {
-		return "redirect:/assets/list.html";
-	}
+//	@GetMapping("/list")
+//	public String list() {
+//		return "redirect:/assets/list.html";
+//	}
 }
 
