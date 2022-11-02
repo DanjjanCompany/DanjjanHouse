@@ -41,6 +41,11 @@ public class DongCode {
 	public void setDongName(String dongName) {
 		this.dongName = dongName;
 	}
+	@Override
+	public String toString() {
+		return "DongCode [dongCode=" + dongCode + ", sidoName=" + sidoName + ", gugunName=" + gugunName + ", dongName="
+				+ dongName + "]";
+	}
 	
 	
 }

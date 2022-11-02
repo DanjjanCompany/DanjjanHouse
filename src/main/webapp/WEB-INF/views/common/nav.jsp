@@ -8,7 +8,7 @@
 	<div class="container-fluid">
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link" href="${root}/board?action=list">공지 사항</a></li>
-			<li class="nav-item"><a class="nav-link" href="${root}/house?action=goSearch">아파트 거래 검색</a></li>
+			<li class="nav-item"><a class="nav-link" href="${root}/house/getSido">아파트 거래 검색</a></li>
 			<li class="nav-item"><a class="nav-link" href="${root}/favorite?action=getFavorite">관심지역</a></li>
 		</ul>
 		<ul class="navbar-nav">
