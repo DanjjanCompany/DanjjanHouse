@@ -69,6 +69,7 @@ public class AdminUserController {
 		try {
 			memberService.joinMember(memberDto);
 			List<MemberDto> list = memberService.listMember(null);
+			logger.debug("dddd{}", list);
 			return new ResponseEntity<List<MemberDto>>(list, HttpStatus.OK);
 //			return new ResponseEntity<Integer>(cnt, HttpStatus.CREATED);
 		} catch (Exception e) {

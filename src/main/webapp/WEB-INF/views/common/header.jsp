@@ -26,8 +26,6 @@
 </head>
 <body>
 	<div class="container">
-		<c:if test="${!empty userinfo}">
-			<%@ include file="/WEB-INF/views/common/confirm.jsp"%>
-		</c:if>
+
 
 		

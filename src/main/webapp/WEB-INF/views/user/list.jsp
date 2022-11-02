@@ -148,7 +148,7 @@
 				document.getElementById("sword").value = "${word}";
 	
 			// 회원 목록
-			fetch("${root}/admin/user")
+			fetch("http://localhost:9000/admin/user")
 				.then(response => response.json())
 				.then(data => makeList(data));
 			
@@ -172,6 +172,7 @@
 			
 			// 회원 목록 tbody
 			function makeList(users) {
+				console.log(users);
 				let tbody = ``;
 				users.forEach(function(user) {
 					tbody += `
