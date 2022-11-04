@@ -13,5 +13,14 @@ public class PageController {
 		return "user/list";
 	}
 	
+	@GetMapping("/searchHouse")
+	public String goHouse() {
+		return "house/search";
+	}
+	
+	@GetMapping("/home")
+	public String goHome() {
+		return "index";
+	}
 }
 

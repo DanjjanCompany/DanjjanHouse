@@ -46,4 +46,9 @@ public class HouseServiceImpl implements HouseService{
 	public List<HouseDeal> getHouseDeal(String aptCode) {
 		return houseMapper.getHouseDeal(aptCode);
 	}
+
+	@Override
+	public String getDCode(String reDongCode) {
+		return houseMapper.getDCode(reDongCode);
+	}
 }

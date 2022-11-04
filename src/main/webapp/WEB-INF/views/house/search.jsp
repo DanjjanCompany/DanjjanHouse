@@ -5,8 +5,8 @@
 <head>
 <%@ include file="../common/header.jsp"%>
 
-<%-- <link rel="stylesheet" type="text/css" href="${root}/css/marker.css">
- --%>
+<link rel="stylesheet" type="text/css" href="${root}/css/marker.css">
+
  </head>
 
 <body>
@@ -55,9 +55,9 @@
 
 	<%@ include file="../common/footer.jsp"%>
 
-	<!-- <script type="text/javascript"
-		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d255be6909833997803c85a0a23a6928"></script>
- -->	<script>
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8847514c621fc1830dd53ecf9f1b36f4"></script>
+	<script>
 	window.onload=function(){
 		
 		getSido();
@@ -95,6 +95,9 @@
 		
 		let result = await fetch("${root}/house/tradeCode?Code="+value)
 		let sidoList = await result.json()
+		dealTable.innerHTML="";
+		
+		console.log("sido", sidoList);
 		
 		sidoList.forEach(houseDeal=>{
 			dealTable.innerHTML += `<tr><td>${"${houseDeal.no}"}</td>
@@ -110,11 +113,13 @@
 	 }
 	
 	async function getDongCode(value){
+		console.log("?")
 		let result = await fetch("${root}/house/dongCode?Code="+value);
+		console.log("이건 result입니다",result);
 		let data = await result.json();
 		
 		window.navigator.geolocation.getCurrentPosition(function(position) {
-			//makeMarker(position, data);
+			makeMarker(position, data);
 		});
 		
 		getTradeCode(value)

@@ -18,4 +18,5 @@ public interface HouseMapper {
 	String getDongCode(String Code);
 	List<HouseInfo> getHouseInfo(String Code);
 	List<HouseDeal> getHouseDeal(String aptCode);
+	String getDCode(String reDongCode);
 }

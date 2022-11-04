@@ -19,7 +19,7 @@
 		</ul>
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link"
-				style="text-align: center" href="${root}/index.jsp"><h3>WhereIsMyHome</h3></a></li>
+				style="text-align: center" href="${root}/go/home"><h3>WhereIsMyHome</h3></a></li>
 		</ul>
 		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 		<c:choose>

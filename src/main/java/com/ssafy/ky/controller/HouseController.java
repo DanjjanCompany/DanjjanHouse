@@ -90,36 +90,33 @@ public class HouseController {
 	@GetMapping("dongCode")
 	@ResponseBody // 응답
 	public ResponseEntity<?> getDongCode(@RequestParam String Code) throws SQLException{
-		log.debug(Code);
-		log.debug("getDongCode() 메서드 실행");
 		
-		//dongC = houseService.getDongCode(Code);
-		//String add = sidoC + " " + gugunC;
-		//log.debug(add);
-		
-		Map<String, Object> map = new HashMap<>();
-		List<String> strings = new ArrayList<String>();
-		strings.add(add);
-		strings.add(Code);
-		
-		List<HouseInfo> list = houseService.getHouseInfo(Code);
-		
-		map.put("strings", strings);
-		//map.put("add", add);
-		map.put("list", list);
-		
-		
-		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK); // 200
-		/**
+		log.debug("getDongCode 실행");
+		String ReDongCode = Code;
+		log.debug(ReDongCode);
+
+		//dongC = houseService.getDCode(ReDongCode);
+
+
+		List<HouseInfo> list = houseService.getHouseInfo(ReDongCode);
+
+		/*
+		 * JsonArray jsonArray =
+		 * JsonParser.parseString(gson.toJson(list)).getAsJsonArray();
 		 * 
-		 * {
-		 * 	"dongC" : "dd",
-		 * 	"list" : [
-		 * 		{},
-		 * 		{}
-		 * 	]
-		 * }
+		 * JsonObject jsonObject = new JsonObject();
 		 */
+
+		Map<String,Object> map = new HashMap<String, Object>();
+		String add = sidoC + " " + gugunC;
+
+		map.put("address", add);
+
+		map.put("dongCode", ReDongCode);
+
+		map.put("apt", list);
+
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK); // 200
 		
 	}
 	
@@ -128,7 +125,7 @@ public class HouseController {
 	public ResponseEntity<?> getTradeCode(@RequestParam String Code) throws SQLException{
 		
 		log.debug("getTradeCode() 메서드 실행");
-		
+		log.debug(Code);
 		List<HouseInfo> list = houseService.getHouseInfo(Code);
 
 		List<HouseDeal> dealList = houseService.getHouseDeal(list.get(0).getAptCode());

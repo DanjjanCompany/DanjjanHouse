@@ -26,7 +26,7 @@
 		and dongName is not null;
 	</select>
 	
-	<select id="getDongCode" resultType="DongCode">
+	<select id="getDongCode" parameterType="String" resultType="String">
 		select dongName 
 		from dongcode
 		where left(dongcode, 8) = left(#{Code}, 8)
@@ -43,6 +43,13 @@
 		select  *
 		from housedeal
 		where aptCode = #{aptCode} order by no desc;
+	</select>
+	
+	<select id="getDCode" resultType="String">
+		select dongName 
+		from dongcode
+		where left(dongcode, 8) = left(?, 8)
+		and dongName is not null;
 	</select>
 </mapper>
 
