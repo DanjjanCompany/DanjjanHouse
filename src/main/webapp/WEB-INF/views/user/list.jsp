@@ -199,7 +199,7 @@
 			
 			// 회원 삭제.
 		      function userDelete(el) {
-		        if (confirm("삭제 하시렵니까?")) {
+		        if (confirm("삭제 하시겠습니까?")) {
 		          let id = el.parentNode.parentNode.getAttribute("data-id");
 		          console.log(id);
 		          let config = {

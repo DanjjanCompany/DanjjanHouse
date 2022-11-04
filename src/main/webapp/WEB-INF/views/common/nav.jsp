@@ -17,10 +17,21 @@
 			</c:if>
 			
 		</ul>
-		<ul class="navbar-nav">
-			<li class="nav-item"><a class="nav-link"
-				style="text-align: center" href="${root}/go/home"><h3>WhereIsMyHome</h3></a></li>
-		</ul>
+		<c:choose>
+		<c:when test="${userinfo eq null}">
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link"
+					style="margin-right: 40px" href="${root}/go/home"><h3>WhereIsMyHome</h3></a></li>
+			</ul>
+		</c:when>
+		<c:otherwise>
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link"
+					style="margin-left: 40px" href="${root}/go/home"><h3>WhereIsMyHome</h3></a></li>
+			</ul>
+		</c:otherwise>
+		</c:choose>
+		
 		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 		<c:choose>
 			<c:when test="${userinfo ne null}">

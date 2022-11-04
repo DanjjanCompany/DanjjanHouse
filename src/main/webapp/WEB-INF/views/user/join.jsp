@@ -33,7 +33,7 @@
                 class="form-control"
                 id="username"
                 name="userName"
-                placeholder="이름..."
+                placeholder="이름"
               />
             </div>
             <div class="mb-3">
@@ -43,7 +43,7 @@
                 class="form-control"
                 id="userid"
                 name="userId"
-                placeholder="아이디..."
+                placeholder="아이디"
               />
             </div>
             <div id="idcheck-result"></div>
@@ -54,12 +54,12 @@
                 class="form-control"
                 id="userpwd"
                 name="userPwd"
-                placeholder="비밀번호..."
+                placeholder="비밀번호"
               />
             </div>
             <div class="mb-3">
-              <label for="pwdcheck" class="form-label">비밀번호확인 : </label>
-              <input type="password" class="form-control" id="pwdcheck" placeholder="비밀번호확인..." />
+              <label for="pwdcheck" class="form-label">비밀번호 확인 : </label>
+              <input type="password" class="form-control" id="pwdcheck" placeholder="비밀번호 확인" />
             </div>
             <div class="mb-3">
               <label for="emailid" class="form-label">이메일 : </label>
@@ -69,7 +69,7 @@
                   class="form-control"
                   id="emailid"
                   name="emailId"
-                  placeholder="이메일아이디"
+                  placeholder="이메일 아이디"
                 />
                 <span class="input-group-text">@</span>
                 <select
@@ -78,11 +78,11 @@
                   name="emailDomain"
                   aria-label="이메일 도메인 선택"
                 >
-                  <option selected>선택</option>
-                  <option value="ssafy.com">싸피</option>
-                  <option value="google.com">구글</option>
+                  <option selected>선택하기</option>
                   <option value="naver.com">네이버</option>
                   <option value="kakao.com">카카오</option>
+                  <option value="google.com">구글</option>
+                  <option value="ssafy.com">싸피</option>
                 </select>
               </div>
             </div>
@@ -111,7 +111,7 @@
               <button type="button" id="btn-join" class="btn btn-outline-primary mb-3">
                 회원가입
               </button>
-              <button type="button" class="btn btn-outline-success mb-3">초기화</button>
+              <button type="button" id="btn-clear" class="btn btn-outline-success mb-3">초기화</button>
             </div>
           </form>
         </div>
@@ -170,6 +170,17 @@
           form.setAttribute("action", "${root}/user/join");
           form.submit();
         }
+      });
+      
+      document.querySelector("#btn-clear").addEventListener("click", function () {
+    	  document.querySelector("#username").value = "";
+    	  document.querySelector("#userid").value = "";
+    	  document.querySelector("#userpwd").value = "";
+    	  document.querySelector("#userpwd").value = "";
+    	  document.querySelector("#pwdcheck").value = "";
+    	  document.querySelector("#emailid").value = "";
+    	  document.querySelector("#emaildomain").value = "선택하기";
+    	  
       });
     </script>
   </body>
