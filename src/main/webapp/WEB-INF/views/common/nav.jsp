@@ -10,7 +10,7 @@
 			<li class="nav-item"><a class="nav-link"
 				href="${root}/board?action=list">공지 사항</a></li>
 			<li class="nav-item"><a class="nav-link"
-				href="${root}/house/sido">아파트 검색</a></li>
+				href="${root}/go/searchHouse">아파트 검색</a></li>
 			<c:if test="${userinfo ne null}">
 				<li class="nav-item"><a class="nav-link"
 					href="${root}/favorite?action=getFavorite">관심지역</a></li>

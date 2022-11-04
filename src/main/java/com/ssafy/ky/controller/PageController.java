@@ -13,6 +13,5 @@ public class PageController {
 		return "user/list";
 	}
 	
-	
-	
 }
+
