@@ -113,7 +113,7 @@ public class MemberController {
 	// 데이터 수정 요청
 	@PutMapping("/{userId}")
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 수정한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
-	public ResponseEntity<?> modifyBook(@RequestBody MemberDto userId) throws Exception {
+	public ResponseEntity<?> modifyUser(@RequestBody MemberDto userId) throws Exception {
 		int result = memberService.updateMember(userId);
 
 		// 상태 코드만으로 구분
@@ -125,7 +125,7 @@ public class MemberController {
 
 	// 4. Delete 삭제
 	@DeleteMapping("/{userId}")
-	@ApiOperation(value = "userId에 해당하는 차의 정보 삭제. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열 반환", response = String.class)
+	@ApiOperation(value = "userId에 해당하는 유저의 정보 삭제. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열 반환", response = String.class)
 		public ResponseEntity<?> doDelete(@PathVariable String userId) throws Exception {
 			int result = memberService.deleteMember(userId);
 			
