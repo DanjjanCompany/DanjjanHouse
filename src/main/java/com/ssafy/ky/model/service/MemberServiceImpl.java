@@ -29,25 +29,27 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void joinMember(MemberDto memberDto) throws Exception {
+	public int joinMember(MemberDto memberDto) throws Exception {
 //		sqlSession.getMapper(MemberMapper.class).joinMember(memberDto);
-		memberMapper.joinMember(memberDto);
+		return memberMapper.joinMember(memberDto);
 	}
 
 	@Override
-	public MemberDto loginMember(Map<String, String> map) throws Exception {
+	public MemberDto loginMember(MemberDto memberDto) throws Exception {
 //		return sqlSession.getMapper(MemberMapper.class).loginMember(map);
-		return memberMapper.loginMember(map);
+		return memberMapper.loginMember(memberDto);
 	}
 
 	@Override
-	public List<MemberDto> listMember(Map<String, Object> map) throws Exception {
-		return memberMapper.listMember(map);
+	public List<MemberDto> listMember() throws Exception {
+		return memberMapper.listMember();
 	}
 
 	@Override
 	public MemberDto getMember(String userId) throws Exception {
-		return memberMapper.getMember(userId);
+		MemberDto member =memberMapper.getMember(userId);
+		System.out.println("service result : " + member);
+		return member;
 	}
 
 	@Override

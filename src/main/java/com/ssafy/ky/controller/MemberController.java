@@ -1,110 +1,110 @@
 package com.ssafy.ky.controller;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.ky.dto.MemberDto;
 import com.ssafy.ky.model.service.MemberService;
 
-@Controller
-@RequestMapping("/user")
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+
+@CrossOrigin("*")
+@RestController
+@RequestMapping("/users")
+@Slf4j
 public class MemberController {
-	
-	private final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
-	private final MemberService memberService;
-	
+
 	@Autowired
-	public MemberController(MemberService memberService) {
-		logger.info("MemberController 생성자 호출");
-		this.memberService = memberService;
-	}
+	MemberService memberService;
 
-	@GetMapping("/join")
-	public String join() {
-		return "user/join";
-	}
-	
-	@GetMapping("/{userid}")
-	@ResponseBody
-	public String idCheck(@PathVariable("userid") String userId) throws Exception {
-		logger.debug("idCheck userid : {}", userId);
-		int cnt = memberService.idCheck(userId);
-		return cnt + "";
-	}
-	
-	@PostMapping("/join")
-	public String join(MemberDto memberDto, Model model) {
-		logger.debug("memberDto info : {}", memberDto);
-		try {
-			memberService.joinMember(memberDto);
-			return "redirect:/user/login";
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "회원 가입 중 문제 발생!!!");
-			return "error/error";
-		}
-	}
-	
-	@GetMapping("/login")
-	public String login() {
-		return "user/login";
-	}
-	
+	final static int EXPIRE_MINUTES = 10;
+	final static String SECRET_KEY = "ssafy";
+
+	//로그인 요청 처리 - POST /users/login
 	@PostMapping("/login")
-	public String login(@RequestParam Map<String, String> map, Model model, HttpSession session, HttpServletResponse response) {
-		logger.debug("map : {}", map.get("userid"));
-		try {
-			MemberDto memberDto = memberService.loginMember(map);
-			logger.debug("memberDto : {}", memberDto);
-			if(memberDto != null) {
-				session.setAttribute("userinfo", memberDto);
-				logger.debug("로그인 성공!");
-				
-				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
-				cookie.setPath("/board");
-				if("ok".equals(map.get("saveid"))) {
-					cookie.setMaxAge(60*60*24*365*40);
-				} else {
-					cookie.setMaxAge(0);
-				}
-				response.addCookie(cookie);
-				return "redirect:/";
-			} else {
-				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 다시 로그인하세요!");
-				return "user/login";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "로그인 중 문제 발생!!!");
-			return "error/error";
-		}
-	}
-	
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/";
-	}
-	
-//	@GetMapping("/list")
-//	public String list() {
-//		return "redirect:/assets/list.html";
-//	}
-}
+	public ResponseEntity<?> doLogin( @RequestBody Map<String,String> map) throws Exception{
+		//유저 정보 조회
+		MemberDto member = new MemberDto();
+		member.setUserId(map.get("id"));
+		member.setUserPwd(map.get("pass"));
+		System.out.println("memberDto member: " + member.toString());
+		MemberDto memberInfo = memberService.loginMember(member);
+		System.out.println("memberInfo : " + memberInfo);
+		//로그인 성공
+		if(memberInfo!=null) {
+			// jwt 토큰 생성
+			String token = Jwts.builder()
+					// header
+					.setHeaderParam("algo", "HS256")
+					.setHeaderParam("type", "JWT")
+					// payload
+					.claim("id", memberInfo.getUserId())
+					.claim("name", memberInfo.getUserName())
+					// 만료기간 설정
+					.setExpiration(new Date(System.currentTimeMillis() + 1000*60*EXPIRE_MINUTES))
+					// signature
+					.signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes("UTF-8"))
+					.compact();
 
+			log.debug("발급된 토큰 : {}", token);
+
+			// 한번 감싸서 보냄 -> 받을때 가독성
+			Map<String, String> result = new HashMap<>();
+			result.put("token", token);
+
+
+			return new ResponseEntity<Map<String, String>>(result, HttpStatus.OK);
+		}
+		//로그인 실패
+		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	//1. Create 등록
+	//데이터 등록 요청
+	@PostMapping
+	@ApiOperation(value = "멤버 정보 등록. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
+	public ResponseEntity<?> doRegist(@RequestBody MemberDto member) throws Exception {
+		int result = memberService.joinMember(member);
+		//상태 코드만으로 구분
+		if(result==1) return new ResponseEntity<Void>(HttpStatus.OK);
+		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	//2. Read 조회
+	//전체  목록 조회
+	@GetMapping
+	@ApiOperation(value = "모든 유저의 정보를 반환", response = List.class)
+	public ResponseEntity<?> showList() throws Exception {
+
+		List<MemberDto> members = memberService.listMember();
+		return new ResponseEntity<List<MemberDto>>(members, HttpStatus.OK);
+	}
+	
+	//상세 조회
+	@GetMapping("/{userId}")
+	@ApiOperation(value = "userId에 해당하는 유저의 정보를 반환한다.", response = MemberDto.class)
+	public ResponseEntity<?> showDetail(@PathVariable String userId) throws Exception {
+		System.out.println("userId : " + userId);
+		log.debug("id: {}", userId);
+		MemberDto member = memberService.getMember(userId);
+		//System.out.println("상세조회 결과 : " + member);
+		log.debug("멤버에유 : {} ", member);
+		return new ResponseEntity<MemberDto>(member, HttpStatus.OK);
+	}
+}

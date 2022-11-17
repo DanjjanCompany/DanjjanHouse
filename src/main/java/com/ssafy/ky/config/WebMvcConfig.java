@@ -9,19 +9,22 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ssafy.ky.interceptor.SessionConfirmInterceptor;
+import com.ssafy.ky.interceptor.LoginInterceptor;
 
 @Configuration
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy //aop autoproxy 설정
 // mapper 인터페이스 스캔 설정
 @MapperScan(basePackages = {"com.ssafy.ky.model.mapper"})
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	// interceptor 등록
 	@Autowired
-	private SessionConfirmInterceptor sessionConfirmInterceptor;
+	LoginInterceptor interceptor;
+//	private SessionConfirmInterceptor sessionConfirmInterceptor;
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(interceptor).addPathPatterns("/users/**").excludePathPatterns("/users/login");
 		
 		/*
 		 * registry.addInterceptor(sessionConfirmInterceptor)
