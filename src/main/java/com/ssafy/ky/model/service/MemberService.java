@@ -15,7 +15,7 @@ public interface MemberService {
 	List<MemberDto> listMember() throws Exception;
 	MemberDto getMember(String userId) throws Exception;
 	
-	void updateMember(MemberDto memberDto) throws Exception;
+	int updateMember(MemberDto memberDto) throws Exception;
 	void deleteMember(String userid) throws Exception;
 	
 }

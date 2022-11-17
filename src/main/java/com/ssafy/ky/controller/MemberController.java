@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,7 +96,7 @@ public class MemberController {
 		List<MemberDto> members = memberService.listMember();
 		return new ResponseEntity<List<MemberDto>>(members, HttpStatus.OK);
 	}
-	
+
 	//상세 조회
 	@GetMapping("/{userId}")
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 반환한다.", response = MemberDto.class)
@@ -106,5 +107,17 @@ public class MemberController {
 		//System.out.println("상세조회 결과 : " + member);
 		log.debug("멤버에유 : {} ", member);
 		return new ResponseEntity<MemberDto>(member, HttpStatus.OK);
+	}
+
+	//3. Update 수정
+	//데이터 수정 요청
+	@PutMapping("/{userId}")
+	@ApiOperation(value = "userId에 해당하는 유저의 정보를 수정한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
+	public ResponseEntity<?> modifyBook(@RequestBody MemberDto userId) throws Exception {
+		int result = memberService.updateMember(userId);
+
+		//상태 코드만으로 구분
+		if(result==1) return new ResponseEntity<Void>(HttpStatus.OK);
+		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
