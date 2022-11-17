@@ -47,9 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberDto getMember(String userId) throws Exception {
-		MemberDto member =memberMapper.getMember(userId);
-		System.out.println("service result : " + member);
-		return member;
+		return memberMapper.getMember(userId);
 	}
 
 	@Override
