@@ -20,6 +20,6 @@ public interface MemberMapper {
 	MemberDto getMember(String userId) throws SQLException;
 	
 	int updateMember(MemberDto memberDto) throws SQLException;
-	void deleteMember(String userId) throws SQLException;
+	int deleteMember(String userId) throws SQLException;
 	
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,31 +38,28 @@ public class MemberController {
 	final static int EXPIRE_MINUTES = 10;
 	final static String SECRET_KEY = "ssafy";
 
-	//로그인 요청 처리 - POST /users/login
+	// 로그인 요청 처리 - POST /users/login
 	@PostMapping("/login")
-	public ResponseEntity<?> doLogin( @RequestBody Map<String,String> map) throws Exception{
-		//유저 정보 조회
+	public ResponseEntity<?> doLogin(@RequestBody Map<String, String> map) throws Exception {
+		// 유저 정보 조회
 		MemberDto member = new MemberDto();
 		member.setUserId(map.get("id"));
 		member.setUserPwd(map.get("pass"));
 		System.out.println("memberDto member: " + member.toString());
 		MemberDto memberInfo = memberService.loginMember(member);
 		System.out.println("memberInfo : " + memberInfo);
-		//로그인 성공
-		if(memberInfo!=null) {
+		// 로그인 성공
+		if (memberInfo != null) {
 			// jwt 토큰 생성
 			String token = Jwts.builder()
 					// header
-					.setHeaderParam("algo", "HS256")
-					.setHeaderParam("type", "JWT")
+					.setHeaderParam("algo", "HS256").setHeaderParam("type", "JWT")
 					// payload
-					.claim("id", memberInfo.getUserId())
-					.claim("name", memberInfo.getUserName())
+					.claim("id", memberInfo.getUserId()).claim("name", memberInfo.getUserName())
 					// 만료기간 설정
-					.setExpiration(new Date(System.currentTimeMillis() + 1000*60*EXPIRE_MINUTES))
+					.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES))
 					// signature
-					.signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes("UTF-8"))
-					.compact();
+					.signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes("UTF-8")).compact();
 
 			log.debug("발급된 토큰 : {}", token);
 
@@ -69,26 +67,28 @@ public class MemberController {
 			Map<String, String> result = new HashMap<>();
 			result.put("token", token);
 
-
 			return new ResponseEntity<Map<String, String>>(result, HttpStatus.OK);
 		}
-		//로그인 실패
-		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		// 로그인 실패
+		else
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//1. Create 등록
-	//데이터 등록 요청
+	// 1. Create 등록
+	// 데이터 등록 요청
 	@PostMapping
 	@ApiOperation(value = "멤버 정보 등록. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
 	public ResponseEntity<?> doRegist(@RequestBody MemberDto member) throws Exception {
 		int result = memberService.joinMember(member);
-		//상태 코드만으로 구분
-		if(result==1) return new ResponseEntity<Void>(HttpStatus.OK);
-		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		// 상태 코드만으로 구분
+		if (result == 1)
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		else
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//2. Read 조회
-	//전체  목록 조회
+	// 2. Read 조회
+	// 전체 목록 조회
 	@GetMapping
 	@ApiOperation(value = "모든 유저의 정보를 반환", response = List.class)
 	public ResponseEntity<?> showList() throws Exception {
@@ -97,27 +97,40 @@ public class MemberController {
 		return new ResponseEntity<List<MemberDto>>(members, HttpStatus.OK);
 	}
 
-	//상세 조회
+	// 상세 조회
 	@GetMapping("/{userId}")
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 반환한다.", response = MemberDto.class)
 	public ResponseEntity<?> showDetail(@PathVariable String userId) throws Exception {
 		System.out.println("userId : " + userId);
 		log.debug("id: {}", userId);
 		MemberDto member = memberService.getMember(userId);
-		//System.out.println("상세조회 결과 : " + member);
+		// System.out.println("상세조회 결과 : " + member);
 		log.debug("멤버에유 : {} ", member);
 		return new ResponseEntity<MemberDto>(member, HttpStatus.OK);
 	}
 
-	//3. Update 수정
-	//데이터 수정 요청
+	// 3. Update 수정
+	// 데이터 수정 요청
 	@PutMapping("/{userId}")
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 수정한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
 	public ResponseEntity<?> modifyBook(@RequestBody MemberDto userId) throws Exception {
 		int result = memberService.updateMember(userId);
 
-		//상태 코드만으로 구분
-		if(result==1) return new ResponseEntity<Void>(HttpStatus.OK);
-		else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		// 상태 코드만으로 구분
+		if (result == 1)
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		else
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	// 4. Delete 삭제
+	@DeleteMapping("/{userId}")
+	@ApiOperation(value = "userId에 해당하는 차의 정보 삭제. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열 반환", response = String.class)
+		public ResponseEntity<?> doDelete(@PathVariable String userId) throws Exception {
+			int result = memberService.deleteMember(userId);
+			
+			//상태 코드만으로 구분
+			if(result==1) return new ResponseEntity<Void>(HttpStatus.OK);
+			else return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

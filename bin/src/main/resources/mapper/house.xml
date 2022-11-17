@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.ky.model.mapper.HouseMapper">
+	<select id="getSido" resultType="DongCode">
+		select dongCode, sidoName
+		from
+		dongcode
+		where right(dongcode, 8) = '00000000';
+	</select>
+
+	<select id="getGugun" resultType="DongCode">
+		select dongCode, gugunName
+		from dongcode
+		where left(dongcode, 2) = left(#{sidoCode}, 2)
+		and
+		right(dongcode, 5) = '00000'
+		and gugunName is not null;
+	</select>
+
+	<select id="getDong" resultType="DongCode">
+		select dongCode, dongName 
+		from dongcode
+		where left(dongcode, 5) = left(#{gugunCode}, 5)
+		and dongName is not null;
+	</select>
+	
+	<select id="getDongCode" parameterType="String" resultType="String">
+		select dongName 
+		from dongcode
+		where left(dongcode, 8) = left(#{Code}, 8)
+		and dongName is not null;
+	</select>
+	
+	<select id="getHouseInfo" resultType="HouseInfo">
+		select  aptCode, roadName, dong, apartmentName, jibun, lng, lat
+		from houseinfo
+		where dongcode = #{Code};
+	</select>
+	
+	<select id="getHouseDeal" resultType="HouseDeal">
+		select  *
+		from housedeal
+		where aptCode = #{aptCode} order by no desc;
+	</select>
+	
+	<select id="getDCode" resultType="String">
+		select dongName 
+		from dongcode
+		where left(dongcode, 8) = left(?, 8)
+		and dongName is not null;
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
