@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import io.jsonwebtoken.Jwts;
@@ -20,9 +21,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		log.debug("요청 메소드 종류 : {}", request.getMethod());
-		System.out.println(request.getRequestURI());
+		System.out.println("RequestURI : " + request.getRequestURI());
 		// 회원가입 요청은 token 체크 X
 		if(HttpMethod.POST.matches(request.getMethod()) && request.getRequestURI().equals("/api/users") ) return true;
+//		if (CorsUtils.isPreFlightRequest(request)) {
+//		    return true;
+//		}
 		if(HttpMethod.OPTIONS.matches(request.getMethod())) return true;
 
 		//뷰에서 access-token라는 이름의 토큰을 받아옴
