@@ -101,11 +101,7 @@ public class MemberController {
 	@GetMapping("/{userId}")
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 반환한다.", response = MemberDto.class)
 	public ResponseEntity<?> showDetail(@PathVariable String userId) throws Exception {
-		System.out.println("userId : " + userId);
-		log.debug("id: {}", userId);
 		MemberDto member = memberService.getMember(userId);
-		// System.out.println("상세조회 결과 : " + member);
-		log.debug("멤버에유 : {} ", member);
 		return new ResponseEntity<MemberDto>(member, HttpStatus.OK);
 	}
 
@@ -115,7 +111,11 @@ public class MemberController {
 	@ApiOperation(value = "userId에 해당하는 유저의 정보를 수정한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
 	public ResponseEntity<?> modifyUser(@RequestBody MemberDto member) throws Exception {
 		int result = memberService.updateMember(member);
+<<<<<<< HEAD
 
+=======
+		log.debug("member: {}",member);
+>>>>>>> 876431a8114cc098c5fbd5f8d1a8f1628a77a8cf
 		// 상태 코드만으로 구분
 		if (result == 1)
 			return new ResponseEntity<Void>(HttpStatus.OK);
