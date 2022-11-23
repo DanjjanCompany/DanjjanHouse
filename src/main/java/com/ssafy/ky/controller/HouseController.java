@@ -26,7 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/house")
 @Slf4j
-@CrossOrigin("http://127.0.0.1:5500")
+@CrossOrigin("*")
+//@CrossOrigin("http://127.0.0.1:5500")
 public class HouseController {
 	
 	static String sidoC = null;
