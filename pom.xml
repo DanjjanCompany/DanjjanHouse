@@ -77,7 +77,10 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-        
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -92,6 +95,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>

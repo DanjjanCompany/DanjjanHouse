@@ -128,10 +128,13 @@ public class HouseController {
 		log.debug(Code);
 		List<HouseInfo> list = houseService.getHouseInfo(Code);
 
-		List<HouseDeal> dealList = houseService.getHouseDeal(list.get(0).getAptCode());
+		try {
+			List<HouseDeal> dealList = houseService.getHouseDeal(list.get(0).getAptCode());
+			return new ResponseEntity<List<HouseDeal>>(dealList, HttpStatus.OK); // 200
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR); // 500
+		}
 		
-		
-		return new ResponseEntity<List<HouseDeal>>(dealList, HttpStatus.OK); // 200
 		/**
 		 * 
 		 * {
