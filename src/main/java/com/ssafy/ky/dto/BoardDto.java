@@ -8,7 +8,7 @@ public class BoardDto {
 	@ApiModelProperty(value = "글번호")
 	private int articleno;
 	@ApiModelProperty(value = "작성자 아이디")
-	private String userid;
+	private String user_id;
 	@ApiModelProperty(value = "글제목")
 	private String subject;
 	@ApiModelProperty(value = "글내용")
@@ -27,11 +27,11 @@ public class BoardDto {
 	}
 
 	public String getUserid() {
-		return userid;
+		return user_id;
 	}
 
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setUserid(String user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getSubject() {
@@ -68,7 +68,7 @@ public class BoardDto {
 
 	@Override
 	public String toString() {
-		return "BoardDto [articleno=" + articleno + ", userid=" + userid + ", subject=" + subject + ", content="
+		return "BoardDto [articleno=" + articleno + ", userid=" + user_id + ", subject=" + subject + ", content="
 				+ content + ", hit=" + hit + ", regtime=" + regtime + "]";
 	}
 

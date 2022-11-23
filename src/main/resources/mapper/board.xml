@@ -5,12 +5,12 @@
 <mapper namespace="com.ssafy.ky.model.mapper.BoardMapper">
 
 	<insert id="writeArticle" parameterType="boardDto">
-		insert into board (userid, subject, content, hit, regtime)
-		values (#{userid}, #{subject}, #{content}, 0, now())
+		insert into board (user_id, subject, content, hit, regtime)
+		values (#{user_id}, #{subject}, #{content}, 0, now())
 	</insert>
 	
 	<select id="listArticle" parameterType="map" resultType="boardDto">
-		select articleno, userid, subject, content, hit,
+		select articleno, user_id, subject, content, hit,
 				case when date_format(regtime, '%Y%m%d') = date_format(now(), '%Y%m%d')
 				then date_format(regtime, '%H:%i:%s')
 				else date_format(regtime, '%y.%m.%d')
@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="getArticle" parameterType="int" resultType="boardDto">
-		select articleno, userid, subject, content, hit, regtime
+		select articleno, user_id, subject, content, hit, regtime
 		from board
 		where articleno = #{articleno}
 	</select>
