@@ -80,6 +80,7 @@ public class MemberController {
 	@ApiOperation(value = "멤버 정보 등록. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환", response = String.class)
 	public ResponseEntity<?> doRegist(@RequestBody MemberDto member) throws Exception {
 		int result = memberService.joinMember(member);
+		log.debug("{}",member);
 		// 상태 코드만으로 구분
 		if (result == 1)
 			return new ResponseEntity<Void>(HttpStatus.OK);
