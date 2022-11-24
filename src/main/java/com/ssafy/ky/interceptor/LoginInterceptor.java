@@ -23,7 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		log.debug("요청 메소드 종류 : {}", request.getMethod());
 		System.out.println("RequestURI : " + request.getRequestURI());
 		// 회원가입 요청은 token 체크 X
-		if(HttpMethod.POST.matches(request.getMethod()) && request.getRequestURI().equals("/api/users/") || request.getRequestURI().equals("/api/users") ) return true;
+		if(HttpMethod.POST.matches(request.getMethod()) && request.getRequestURI().equals("/api/users/") || request.getRequestURI().equals("/api/users") || request.getRequestURI().equals("/api/users/mail") ) return true;
 //		if (CorsUtils.isPreFlightRequest(request)) {
 //		    return true;
 //		}
