@@ -4,15 +4,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.ky.dto.Mail;
 import com.ssafy.ky.dto.MemberDto;
+import com.ssafy.ky.model.service.MailService;
 import com.ssafy.ky.model.service.MemberService;
 
 import io.jsonwebtoken.Jwts;
@@ -42,6 +45,9 @@ public class MemberController {
 	MemberService memberService;
 	
 	@Autowired
+	MailService mailService;
+	
+	@Autowired
 	private JavaMailSender mailSender;
 	
 	final static int EXPIRE_MINUTES = 10;
@@ -53,30 +59,42 @@ public class MemberController {
 	  public ResponseEntity<?> mailSending() {
 	   
 		log.debug("mail 메서드 실행");
-	    String setfrom = "jiyeoyou0416@naver.com";         
-	    String tomail = "jiyeoyou0416@naver.com";  // 받는 사람 이메일
-	    String title = "jiyeoyou0416@naver.com";      // 보내는 사람 이메일
-	    String content = "jiyeoyou0416@naver.com";    // 보내는 사람 이메일
-	    String filename = "hello";                   // 파일 경로.
-	   
-	    try {
-	      MimeMessage message = mailSender.createMimeMessage();
-	      MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-	 
-	      messageHelper.setFrom(setfrom);   // 보내는사람 생략하거나 하면 정상작동을 안함
-	      messageHelper.setTo(tomail);      // 받는사람 이메일
-	      messageHelper.setSubject(title);  // 메일제목은 생략이 가능하다
-	      messageHelper.setText(content);   // 메일 내용
-	     
-	      // 파일첨부
-	      FileSystemResource fsr = new FileSystemResource(filename);
-	      messageHelper.addAttachment("src/main/resources/static/assets/img/img1.jpg", fsr);
-	     
-	      mailSender.send(message);
-	      log.debug("mail 보내짐");
-	    } catch(Exception e){
-	      System.out.println(e);
-	    }
+		
+		/*
+		 * String setfrom = "jiyeoyou0416@naver.com"; String tomail =
+		 * "jiyeoyou0416@naver.com"; // 받는 사람 이메일 String title =
+		 * "jiyeoyou0416@naver.com"; // 보내는 사람 이메일 String content =
+		 * "jiyeoyou0416@naver.com"; // 보내는 사람 이메일 String filename = "img/img1.jpg"; //
+		 * 파일 경로.
+		 * 
+		 * try { MimeMessage message = mailSender.createMimeMessage(); MimeMessageHelper
+		 * messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+		 * 
+		 * messageHelper.setFrom(setfrom); // 보내는사람 생략하거나 하면 정상작동을 안함
+		 * messageHelper.setTo(tomail); // 받는사람 이메일 messageHelper.setSubject(title);
+		 * //메일제목은 생략이 가능하다 messageHelper.setText(content); // 메일 내용
+		 * 
+		 * // 파일첨부 FileSystemResource fsr = new FileSystemResource(filename);
+		 * messageHelper.addAttachment("img/img1.jpg",fsr);
+		 * 
+		 * mailSender.send(message); log.debug("mail 보내짐"); } catch(Exception e){
+		 * System.out.println(e); }
+		 */
+		 
+		
+
+		
+		
+		
+		  Mail mail = new Mail(); mail.setMailFrom("jiyeonyou0416@naver.com");
+		  mail.setMailTo("jiyeonyou0416@naver.com");
+		  mail.setMailSubject("This is Email test.");
+		  mail.setMailContent("Learn how to send email using Spring.");
+		  
+		  //AbstractApplicationContext context = new
+		  //AnnotationConfigApplicationContext(MailConfig.class);
+		  mailService.sendEmail(mail);
+		 
 	   
 	    return new ResponseEntity<Void>(HttpStatus.OK);
 	  } 

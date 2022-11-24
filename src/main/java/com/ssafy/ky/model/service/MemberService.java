@@ -3,6 +3,7 @@ package com.ssafy.ky.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ssafy.ky.dto.Mail;
 import com.ssafy.ky.dto.MemberDto;
 
 public interface MemberService {
@@ -17,5 +18,7 @@ public interface MemberService {
 	
 	int updateMember(MemberDto memberDto) throws Exception;
 	int deleteMember(String userid) throws Exception;
+
+	void sendEmail(Mail mail);
 	
 }
