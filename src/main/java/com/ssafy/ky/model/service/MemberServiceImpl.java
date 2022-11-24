@@ -2,6 +2,7 @@ package com.ssafy.ky.model.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
 
@@ -84,6 +85,38 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int deleteMember(String userId) throws Exception {
 		return memberMapper.deleteMember(userId);		
+	}
+	
+	@Override
+	public String getRandomCode() {
+		
+		/*
+		 * Random rand = new Random(System.nanoTime()); StringBuffer sb = new
+		 * StringBuffer();
+		 * 
+		 * for (int i = 0; i < 20; i++) {
+		 * 
+		 * if(rand.nextBoolean()) { sb.append(rand.nextInt(10)); }else {
+		 * sb.append((char)rand.nextInt(26)+97); } } System.out.println(sb); return
+		 * sb.toString();
+		 */
+		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+	}
+
+	@Override
+	public int setTempPwd(String userId, String str) {
+		return memberMapper.setTempPwd(userId, str);	
 	}
 
 }

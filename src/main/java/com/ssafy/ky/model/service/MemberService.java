@@ -20,5 +20,9 @@ public interface MemberService {
 	int deleteMember(String userid) throws Exception;
 
 	void sendEmail(Mail mail);
+
+	String getRandomCode();
+
+	int setTempPwd(String userId, String str);
 	
 }

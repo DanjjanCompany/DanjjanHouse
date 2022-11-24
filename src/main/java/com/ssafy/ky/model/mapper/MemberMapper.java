@@ -21,5 +21,7 @@ public interface MemberMapper {
 	
 	int updateMember(MemberDto memberDto) throws SQLException;
 	int deleteMember(String userId) throws SQLException;
+
+	int setTempPwd(String userId, String str);
 	
 }

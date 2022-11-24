@@ -56,9 +56,13 @@ public class MemberController {
 	 
 	 // 메일 보내기
 	 @PostMapping("/mail")
-	  public ResponseEntity<?> mailSending() {
+	  public ResponseEntity<?> mailSending(@RequestBody MemberDto member) {
 	   
 		log.debug("mail 메서드 실행");
+		log.debug("member: {}",member);
+		String userId = member.getUserId();
+		String toEmail = member.getEmailId()+"@"+member.getEmailDomain();
+		log.debug("toEmail: {}",toEmail); // 상태 코드만으로 구분
 		
 		/*
 		 * String setfrom = "jiyeoyou0416@naver.com"; String tomail =
@@ -82,21 +86,27 @@ public class MemberController {
 		 */
 		 
 		
-
-		
-		
-		
-		  Mail mail = new Mail(); mail.setMailFrom("jiyeonyou0416@naver.com");
-		  mail.setMailTo("jiyeonyou0416@naver.com");
-		  mail.setMailSubject("This is Email test.");
-		  mail.setMailContent("Learn how to send email using Spring.");
+		  String str = memberService.getRandomCode(); //log.debug("{}",str);
+		  
+		  
+		  
+		  //String userId = "ssafy";
+		  
+		  Mail mail = new Mail(); 
+		  mail.setMailFrom("jiyeonyou0416@naver.com");
+		  mail.setMailTo(toEmail); 
+		  mail.setMailSubject("임시 비밀번호 전송");
+		  mail.setMailContent(userId+"님의 임시 비밀번호는 "+str+"입니다. 추후 비밀번호 변경을 진행해주세요.");
 		  
 		  //AbstractApplicationContext context = new
 		  //AnnotationConfigApplicationContext(MailConfig.class);
-		  mailService.sendEmail(mail);
+		  mailService.sendEmail(mail); 
+		  int result = memberService.setTempPwd(userId,str);
+		  
+		  if (result == 1) return new
+		  ResponseEntity<Void>(HttpStatus.OK); else return new
+		  ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		 
-	   
-	    return new ResponseEntity<Void>(HttpStatus.OK);
 	  } 
 
 

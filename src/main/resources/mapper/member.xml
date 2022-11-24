@@ -56,6 +56,12 @@
 		</trim>
 		where user_id = #{userId}
 	</update>
+	
+	<update id="setTempPwd" parameterType="String">
+		update members
+		set user_password = #{str}
+		where user_id = #{userId}
+	</update>
 
 	<delete id="deleteMember" parameterType="String">
 		delete from members
